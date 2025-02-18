@@ -1,3 +1,14 @@
+# Pseudocode:
+# 1. Initialize the load balancer.
+# 2. Add servers with their capacities.
+# 3. Distribute tasks:
+#    a. For each task, find the server with the lowest utilization.
+#    b. Assign the task to the selected server.
+# 4. Handle server failure:
+#    a. Remove the failed server.
+#    b. Redistribute its tasks to the remaining servers.
+# 5. Print the task distribution before and after failure.
+
 class Server:
     def __init__(self, name: str, capacity: int):
         """

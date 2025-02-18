@@ -39,3 +39,39 @@ The system implements a robust failure handling mechanism that:
 - Sorts tasks by size for optimal redistribution
 - Supports task splitting across multiple servers if necessary
 - Includes rollback capabilities if redistribution fails
+
+### Sample Program Input
+Initial Distribution
+--------------------------------------------------------------------------------
+Server     Capacity   Load       Utilization  Tasks
+--------------------------------------------------------------------------------
+S1         100        45         45.00%      [45]
+S2         80         50         62.50%      [50]
+S3         120        75         62.50%      [75]
+S4         90         30         33.33%      [30]
+S5         110        40         36.36%      [40]
+S6         70         60         85.71%      [60]
+
+### Sample Program Output
+Initial Distribution
+--------------------------------------------------------------------------------
+Server     Capacity   Load       Utilization  Tasks
+--------------------------------------------------------------------------------
+S1         100        75         75.00%      [75]
+S2         80         60         75.00%      [60]
+S3         120        50         41.67%      [50]
+S4         90         45         50.00%      [45]
+S5         110        40         36.36%      [40]
+S6         70         30         42.86%      [30]
+
+Simulating failure of server S3...
+
+Distribution After S3 Failure
+--------------------------------------------------------------------------------
+Server     Capacity   Load       Utilization  Tasks
+--------------------------------------------------------------------------------
+S1         100        75         75.00%      [75]
+S2         80         60         75.00%      [60]
+S4         90         45         50.00%      [45]
+S5         110        90         81.82%      [40, 50]
+S6         70         30         42.86%      [30]

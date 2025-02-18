@@ -1,0 +1,133 @@
+#Pseudocode for Server Load Balancing
+## Server Class
+
+Class Server:
+    Constructor(name, capacity):
+        Initialize name as name
+        Initialize capacity as capacity
+        Initialize tasks as empty list
+        Initialize current_load as 0
+
+    Function can_add_task(task_load):
+        // Check if adding this task would exceed capacity
+        Return current_load + task_load ≤ capacity
+
+    Function add_task(task_load):
+        // Add task if capacity allows
+        If can_add_task(task_load) Then
+            Append task_load to tasks
+            Add task_load to current_load
+            Return true
+        Return false
+
+    Function get_utilization():
+        // Calculate server utilization as percentage
+        If capacity > 0 Then
+            Return (current_load / capacity) × 100
+        Return 0
+
+    Function get_available_capacity():
+        // Calculate remaining capacity
+        Return capacity - current_load
+
+## LoadBalancer Class
+Class LoadBalancer:
+    Constructor():
+        Initialize servers as empty dictionary
+
+    Function add_server(name, capacity):
+        // Validate and add new server
+        If capacity ≤ 0 Then
+            Throw Error("Server capacity must be positive")
+        If name exists in servers Then
+            Throw Error("Server already exists")
+        Create new Server with name and capacity
+        Add server to servers dictionary
+
+    Function find_best_server_for_task(task_load):
+        // Find available servers that can handle the task
+        available_servers = Empty list
+        For each server in servers:
+            If server can_add_task(task_load) Then
+                Add server to available_servers
+
+        If available_servers is empty Then
+            Throw Error("No server can accommodate task")
+
+        // Return server with lowest utilization
+        Return server with minimum utilization from available_servers
+
+    Function distribute_tasks(tasks):
+        // Validate system state
+        If servers is empty Then
+            Throw Error("No servers available")
+
+        // Validate tasks
+        For each task in tasks:
+            If task load ≤ 0 Then
+                Throw Error("Task load must be positive")
+
+        // Sort tasks by size (largest first)
+        sorted_tasks = Sort tasks by load in descending order
+
+        // Distribute tasks to servers
+        For each task in sorted_tasks:
+            best_server = find_best_server_for_task(task load)
+            If not best_server.add_task(task load) Then
+                Throw Error("Failed to add task")
+
+        Return current distribution state
+
+    Function handle_server_failure(failed_server):
+        // Validate server exists
+        If failed_server not in servers Then
+            Throw Error("Server not found")
+
+        // Collect failed server's tasks
+        failed_tasks = Get tasks from failed_server
+        Remove failed_server from servers
+
+        If servers is empty Then
+            Throw Error("No servers available for redistribution")
+
+        // Sort tasks by size for better redistribution
+        sorted_tasks = Sort failed_tasks in descending order
+
+        // Redistribute each task
+        For each task in sorted_tasks:
+            remaining_load = task
+            While remaining_load > 0:
+                best_server = find_best_server_for_task(remaining_load)
+                assignable_load = Minimum of (remaining_load, best_server.available_capacity)
+                If best_server.add_task(assignable_load) Then
+                    remaining_load = remaining_load - assignable_load
+                Else:
+                    // Restore failed server if redistribution fails
+                    Restore failed server and its tasks
+                    Throw Error("Redistribution failed")
+
+        Return current distribution state
+
+## Helper Function
+Function print_distribution(distribution, title):
+    Print title
+    Print header with columns: Server, Capacity, Load, Utilization, Tasks
+    For each server in sorted order:
+        Print server details in formatted manner
+
+## Main Program Flow
+Function main():
+    Initialize LoadBalancer
+    
+    Define server configuration with capacities and initial tasks
+    
+    Try:
+        Add all servers to load balancer
+        Perform initial task distribution
+        Print initial distribution
+        
+        Simulate server failure
+        Redistribute tasks
+        Print new distribution
+    Catch Error:
+        Print error message
