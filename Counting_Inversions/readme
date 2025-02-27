@@ -1,0 +1,39 @@
+# Counting Inversions in Movie Rankings
+
+## Overview
+
+This program calculates how different a user's ranking of movies is from the 
+global ranking using inversion counting.
+
+## Files included
+
+- count_inversions.py → Contains the implementation.
+- README.md → This file.
+
+## How to run
+- Open a terminal or command prompt.
+- Navigate to the folder containing the script.
+- Run the script using:
+python count_inversions.py
+
+### Example Input & Output
+
+#### Input
+A = [3, 1, 2]
+B = [2, 3, 1]
+N = 3
+
+#### Expected Output
+Number of inversions: 2
+
+### Algorithm Explanation
+- Convert B to a position mapping.
+- Transform A into a ranked list.
+- Use Merge Sort to count inversions.
+
+### Time Complexity
+Mapping B: O(N)
+Transforming A: O(N)
+Merge Sort: O(N log N)
+
+Total Complexity: O(NlogN)
